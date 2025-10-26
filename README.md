@@ -20,3 +20,16 @@ Build a beginner-friendly reference for image enhancement
 How pixel intensity distribution affects image quality
 How histogram equalization transforms contrast
 Practical use of OpenCV for image processing
+
+### How It Works
+
+Load image from dataset
+Convert to grayscale if required
+Apply histogram equalization
+Compare histograms and visual outputs
+Example result visualization included inside the notebook
+
+## Author
+### Hafza Noor
+### https://www.linkedin.com/in/hafza-noor-a40ab1236/
+### hafzanoor3106@gmail.com
