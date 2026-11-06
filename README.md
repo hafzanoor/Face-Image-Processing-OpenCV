@@ -1,35 +1,53 @@
-# Face-Image-Processing-OpenCV
-A computer vision project demonstrating face image preprocessing, enhancement, edge detection, feature extraction, and feature matching using Python and OpenCV. Includes brightness analysis, keypoint detection improvements, and visualized outputs for understanding facial details.
-## Histogram Equalization for Image Enhancement
+# Face Image Enhancement and Feature Matching with OpenCV
 
-### Project Overview
+A classical computer vision pipeline applied to **19,906 grayscale face images**: contrast enhancement,
+edge detection, noise reduction, keypoint extraction and feature matching. The project studies how each
+preprocessing step changes what a feature detector can find in an image.
 
-This project explores Histogram Equalization, a powerful image processing technique that improves image contrast by redistributing pixel intensities. Low-contrast images often hide important details in dark or bright areas. Histogram equalization stretches these intensities, allowing features to pop out more visibly.
+![Histogram equalization: before and after](images/histogram_equalization.png)
 
-I applied this technique on a real dataset of images, comparing before and after results to showcase how contrast enhancement helps in better visual interpretation and potential downstream tasks like object recognition.
+## Pipeline
+| Step | Method | Purpose |
+|---|---|---|
+| 1. Preprocessing | Resize to 128 x 128, convert to grayscale | Uniform input size, faster processing |
+| 2. Contrast enhancement | Histogram equalization (`cv2.equalizeHist`) | Spread pixel intensities to reveal detail in dark and bright regions |
+| 3. Edge detection | Canny (thresholds 100 / 200) | Find facial contours and boundaries |
+| 4. Noise reduction | Gaussian blur (5 x 5 kernel) | Suppress noise before feature extraction |
+| 5. Keypoints | ORB detector and descriptors | Locate distinctive, repeatable points |
+| 6. Matching | Brute-force matcher, Hamming distance, cross-check | Pair similar descriptors across two images |
 
-### Objectives
+## Results
+- **Contrast:** histogram equalization raised the average brightness across the dataset from **91.8 to 128.7**
+  (on a 0 to 255 scale), centring the intensity distribution.
+- **Keypoints:** ORB detected **about 43 keypoints per image** on average (first 10 processed images).
+- **Matching:** 17 cross-checked matches were found between two images of **different people**. Many of the
+  match lines cross, which shows that most of these correspondences are not anatomically meaningful.
 
-Enhance image visibility and clarity
-Study effect of equalization on different types of images
-Visualize image histograms before and after processing
-Build a beginner-friendly reference for image enhancement
+| Canny edges | ORB keypoints |
+|---|---|
+| ![Canny edge detection](images/canny_edges.png) | ![ORB keypoints](images/orb_keypoints.png) |
 
-### What You’ll Learn
+![Feature matching between two different faces](images/feature_matching.png)
 
-How pixel intensity distribution affects image quality
-How histogram equalization transforms contrast
-Practical use of OpenCV for image processing
+## Observations and limitations
+- At 128 x 128 resolution, faces contain few strong corners, so ORB finds relatively few keypoints.
+- Matching two different faces mostly produces incorrect correspondences. Keypoint matching on its own is
+  not a reliable way to compare identities; learned face embeddings would be needed for that.
+- In this version, Canny is applied before Gaussian smoothing. Smoothing first would usually give cleaner edges.
 
-### How It Works
+## Possible extensions
+- Compare matching on two images of the **same** person versus different people.
+- Filter matches with Lowe's ratio test and RANSAC to remove outliers.
+- Measure how each preprocessing step changes keypoint count and match quality.
 
-Load image from dataset
-Convert to grayscale if required
-Apply histogram equalization
-Compare histograms and visual outputs
-Example result visualization included inside the notebook
+## How to run
+1. Install the requirements: `pip install opencv-python numpy matplotlib`
+2. Open `Face_Image_Processing_OpenCV.ipynb` and set `base_dir` in the first code cell to the folder
+   that contains your face images.
+3. Run all cells.
 
-## Author
-### Hafza Noor
-### https://www.linkedin.com/in/hafza-noor-a40ab1236/
-### hafzanoor3106@gmail.com
+## Tools
+Python · OpenCV · NumPy · Matplotlib
+
+---
+Author: [Hafza Noor](https://github.com/hafzanoor)
